@@ -3,7 +3,7 @@ import java.util.Objects;
 
 public class Tender {
     private ArrayList<Brigade> brigades;
-    ArrayList<Brigade> brigadesPassed = new ArrayList<>();
+    ArrayList<Brigade> brigadesPassed1 = new ArrayList<>();
 
     public Tender(ArrayList<Brigade> brigades) {
         this.brigades = brigades;
@@ -29,24 +29,27 @@ public class Tender {
         ArrayList<Brigade> brigades = tender.getBrigades();
 
 
-        for (int i = 0; i < brigades.size(); i++) {
-            tender.validation2(Brigade.getNumberOfSpecialists(brigades.get(i)), neededArray, brigades);
-        }
 
-        System.out.println(brigadesPassed);
+            tender.validation2(neededArray);
+
+
     }
 
 
-    public void validation2(int[] checkedArray, int[] neededArray, ArrayList<Brigade> brigades) {
+    public void validation2(int[] neededArray) {
+        int i = 0;
+        int[] checkedArray = Brigade.getNumberOfSpecialists(brigades.get(1));
 
         for (int j = 0; j < neededArray.length; j++) {
             if (checkedArray[j] < neededArray[j]) {
-                break;
-            } else {
-                brigadesPassed.add(brigades.get(j));
-                break;
+                i++;
             }
         }
+            if (i == 0) {
+                brigadesPassed1.add(brigades.get(1));
+            }
+        System.out.println(i);
+        System.out.println(brigadesPassed1);
     }
 
     @Override

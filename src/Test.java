@@ -1,6 +1,7 @@
 import java.math.BigDecimal;
 import java.util.*;
 
+
 public class Test {
     public static void main(String[] args) {
 
@@ -50,7 +51,7 @@ public class Test {
 
         Tender tender = new Tender(new ArrayList<>(List.of(brigade1, brigade2, brigade3, brigade4)));
 
-        tender.validation(1, 1, 2, 1, 1, 2, tender);
+        tender.validation(2, 1, 2, 1, 1, 1, tender);
     }
 
 
