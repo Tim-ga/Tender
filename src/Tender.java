@@ -1,9 +1,10 @@
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Tender {
     private ArrayList<Brigade> brigades;
-    ArrayList<Brigade> brigadesPassed1 = new ArrayList<>();
+    private ArrayList<Brigade> brigadesPassed = new ArrayList<>();
 
     public Tender(ArrayList<Brigade> brigades) {
         this.brigades = brigades;
@@ -17,39 +18,63 @@ public class Tender {
         this.brigades = brigades;
     }
 
-    public int[] conductingATender(int numberOfArchitect, int numberOfBricklayer, int numberOfElectrician,
-                                   int numberOfWelder, int numberOfPlumber, int numberOfFitter) {
-        int[] requiredNumberOfSpecialists = new int[]{numberOfArchitect, numberOfBricklayer, numberOfElectrician, numberOfWelder, numberOfPlumber, numberOfFitter};
-        return requiredNumberOfSpecialists;
+    public ArrayList<Brigade> getBrigadesPassed() {
+        return brigadesPassed;
     }
 
-    public void validation(int numberOfArchitect, int numberOfBricklayer, int numberOfElectrician,
-                           int numberOfWelder, int numberOfPlumber, int numberOfFitter, Tender tender) {
-        int[] neededArray = tender.conductingATender(numberOfArchitect, numberOfBricklayer, numberOfElectrician, numberOfWelder, numberOfPlumber, numberOfFitter);
+    public void setBrigadesPassed(ArrayList<Brigade> brigadesPassed) {
+        this.brigadesPassed = brigadesPassed;
+    }
+
+    public Brigade validation(int numberOfArchitect, int numberOfBricklayer, int numberOfElectrician,
+                              int numberOfWelder, int numberOfPlumber, int numberOfFitter, Tender tender) {
+
+        int[] neededArray = new int[]{numberOfArchitect, numberOfBricklayer, numberOfElectrician, numberOfWelder, numberOfPlumber, numberOfFitter};
         ArrayList<Brigade> brigades = tender.getBrigades();
 
+        for (int numberBrigade = 0; numberBrigade < brigades.size(); numberBrigade++) {
+            int[] checkedArray = Brigade.getNumberOfSpecialists(brigades.get(numberBrigade));
+            tender.checkArray(checkedArray, neededArray, numberBrigade);
+        }
 
-
-            tender.validation2(neededArray);
-
-
+        Brigade winnerBrigade = tender.selectionLowestPrice(brigadesPassed);
+        brigadesPassed.clear();
+        return winnerBrigade;
     }
 
-
-    public void validation2(int[] neededArray) {
-        int i = 0;
-        int[] checkedArray = Brigade.getNumberOfSpecialists(brigades.get(1));
+    private void checkArray(int[] checkedArray, int[] neededArray, int numberBrigade) {
+        int discrepancy = 0;
 
         for (int j = 0; j < neededArray.length; j++) {
             if (checkedArray[j] < neededArray[j]) {
-                i++;
+                discrepancy++;
             }
         }
-            if (i == 0) {
-                brigadesPassed1.add(brigades.get(1));
+        if (discrepancy == 0) {
+            brigadesPassed.add(brigades.get(numberBrigade));
+        }
+    }
+
+    private Brigade selectionLowestPrice(ArrayList<Brigade> brigadesPassed) throws SuitableBrigadesExeption{
+        Brigade winnerBrigade = new Brigade(null);
+
+        if (brigadesPassed.size() == 0) {
+            throw new SuitableBrigadesExeption("Нет подходящих бригад. Проект строительства закрыт!");
+        }
+        if (brigadesPassed.size() == 1) {
+            winnerBrigade = brigadesPassed.get(0);
+        }
+        if (brigadesPassed.size() > 1) {
+            BigDecimal minFullCostBrigade = Brigade.getBrigadeFullCost(brigadesPassed.get(0));
+
+            for (int i = 0; i < brigadesPassed.size(); i++) {
+                minFullCostBrigade = Brigade.getBrigadeFullCost(brigadesPassed.get(i)).min(minFullCostBrigade);
+                if (Brigade.getBrigadeFullCost(brigadesPassed.get(i)).equals(minFullCostBrigade)) {
+                    winnerBrigade = brigadesPassed.get(i);
+                }
             }
-        System.out.println(i);
-        System.out.println(brigadesPassed1);
+        }
+        return winnerBrigade;
     }
 
     @Override
