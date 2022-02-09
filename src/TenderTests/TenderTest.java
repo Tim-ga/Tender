@@ -1,14 +1,19 @@
+package TenderTests;
+
+import TenderBody.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 public class TenderTest {
 
-    Tender tender;
+    Tender tender1;
+    Tender tender2;
+    Tender tender3;
+    Tender tender4;
+    Tender tender5;
     Brigade brigade1;
     Brigade brigade2;
     Brigade brigade3;
@@ -16,7 +21,7 @@ public class TenderTest {
 
     @Before
     public void initialization() {
-        ArrayList<Employee> employeesBrigade1 = new ArrayList<>(); //full cost brigade 8600
+        ArrayList<Employee> employeesBrigade1 = new ArrayList<>(); //full cost brigade 7800
         brigade1 = new Brigade(employeesBrigade1);
         employeesBrigade1.add(new Employee(EnumSet.of(Skills.ARCHITECT), new BigDecimal("1200")));
         employeesBrigade1.add(new Employee(EnumSet.of(Skills.ARCHITECT, Skills.BRICKLAYER), new BigDecimal("2500")));
@@ -49,7 +54,7 @@ public class TenderTest {
         employeesBrigade3.add(new Employee(EnumSet.of(Skills.PLUMBER, Skills.FITTER), new BigDecimal("1100")));
         employeesBrigade3.add(new Employee(EnumSet.of(Skills.FITTER), new BigDecimal("850")));
 
-        ArrayList<Employee> employeesBrigade4 = new ArrayList<>(); //full cost brigade 8400
+        ArrayList<Employee> employeesBrigade4 = new ArrayList<>(); //full cost brigade 7650
         brigade4 = new Brigade(employeesBrigade4);
         employeesBrigade4.add(new Employee(EnumSet.of(Skills.ARCHITECT), new BigDecimal("2100")));
         employeesBrigade4.add(new Employee(EnumSet.of(Skills.BRICKLAYER), new BigDecimal("800")));
@@ -59,15 +64,61 @@ public class TenderTest {
         employeesBrigade4.add(new Employee(EnumSet.of(Skills.PLUMBER), new BigDecimal("800")));
         employeesBrigade4.add(new Employee(EnumSet.of(Skills.PLUMBER, Skills.WELDER), new BigDecimal("1200")));
 
-        tender = new Tender(new ArrayList<>(List.of(brigade1, brigade2, brigade3, brigade4)));
+        Map<Skills, Integer> neededSpecialists1 = new HashMap<>();
+        neededSpecialists1.put(Skills.ARCHITECT, 1);
+        neededSpecialists1.put(Skills.BRICKLAYER, 1);
+        neededSpecialists1.put(Skills.ELECTRICIAN, 3);
+        neededSpecialists1.put(Skills.WELDER, 1);
+        neededSpecialists1.put(Skills.PLUMBER, 2);
+        neededSpecialists1.put(Skills.FITTER, 1);
+
+        Map<Skills, Integer> neededSpecialists2 = new HashMap<>();
+        neededSpecialists2.put(Skills.ARCHITECT, 2);
+        neededSpecialists2.put(Skills.BRICKLAYER, 1);
+        neededSpecialists2.put(Skills.ELECTRICIAN, 1);
+        neededSpecialists2.put(Skills.WELDER, 1);
+        neededSpecialists2.put(Skills.PLUMBER, 2);
+        neededSpecialists2.put(Skills.FITTER, 1);
+
+        Map<Skills, Integer> neededSpecialists3 = new HashMap<>();
+        neededSpecialists3.put(Skills.ARCHITECT, 1);
+        neededSpecialists3.put(Skills.BRICKLAYER, 1);
+        neededSpecialists3.put(Skills.ELECTRICIAN, 1);
+        neededSpecialists3.put(Skills.WELDER, 1);
+        neededSpecialists3.put(Skills.PLUMBER, 1);
+        neededSpecialists3.put(Skills.FITTER, 0);
+
+        Map<Skills, Integer> neededSpecialists4 = new HashMap<>();
+        neededSpecialists4.put(Skills.ARCHITECT, 1);
+        neededSpecialists4.put(Skills.BRICKLAYER, 3);
+        neededSpecialists4.put(Skills.ELECTRICIAN, 1);
+        neededSpecialists4.put(Skills.WELDER, 1);
+        neededSpecialists4.put(Skills.PLUMBER, 2);
+        neededSpecialists4.put(Skills.FITTER, 0);
+
+        Map<Skills, Integer> neededSpecialists5 = new HashMap<>();
+        neededSpecialists5.put(Skills.ARCHITECT, 0);
+        neededSpecialists5.put(Skills.BRICKLAYER, 0);
+        neededSpecialists5.put(Skills.ELECTRICIAN, 10);
+        neededSpecialists5.put(Skills.WELDER, 0);
+        neededSpecialists5.put(Skills.PLUMBER, 0);
+        neededSpecialists5.put(Skills.FITTER, 0);
+
+        ArrayList<Brigade> brigades = new ArrayList<>(List.of(brigade1, brigade2, brigade3, brigade4));
+
+        tender1 = new Tender(neededSpecialists1, brigades);
+        tender2 = new Tender(neededSpecialists2, brigades);
+        tender3 = new Tender(neededSpecialists3, brigades);
+        tender4 = new Tender(neededSpecialists4, brigades);
+        tender5 = new Tender(neededSpecialists5, brigades);
     }
 
     @Test
     public void validation() {
-        Brigade expectedBrigade1 = tender.validation(1, 1, 3, 1, 2, 1, tender);
-        Brigade expectedBrigade2 = tender.validation(2, 1, 1, 1, 2, 1, tender);
-        Brigade expectedBrigade3 = tender.validation(1, 1, 1, 1, 1, 0, tender);
-        Brigade expectedBrigade4 = tender.validation(1, 3, 1, 1, 2, 0, tender);
+        Brigade expectedBrigade1 = tender1.validation(tender1);
+        Brigade expectedBrigade2 = tender2.validation(tender2);
+        Brigade expectedBrigade3 = tender3.validation(tender3);
+        Brigade expectedBrigade4 = tender4.validation(tender4);
 
         Assert.assertEquals(expectedBrigade1, brigade2);
         Assert.assertEquals(expectedBrigade2, brigade1);
@@ -77,6 +128,6 @@ public class TenderTest {
 
     @Test(expected = SuitableBrigadesExeption.class)
     public void validationExeption() {
-        tender.validation(1, 10, 1, 1, 1, 1, tender);
+        System.out.println(tender5.validation(tender5));
     }
 }

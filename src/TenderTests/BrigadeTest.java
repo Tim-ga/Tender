@@ -1,12 +1,12 @@
+package TenderTests;
+
+import TenderBody.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
-
-import static org.junit.Assert.*;
 
 public class BrigadeTest {
     Brigade brigade;
@@ -30,10 +30,14 @@ public class BrigadeTest {
     }
 
     @Test
-    public void getNumberOfSpecialists() {
-        int[] expectedArray = Brigade.getNumberOfSpecialists(brigade);
-        int[] actualArray = new int[]{1, 2, 1, 0, 0, 0};
+    public void getCountOfSpecialists() {
+        int expected1 = Brigade.getCountOfSpecialists(brigade, Skills.BRICKLAYER);
+        int expected2 = Brigade.getCountOfSpecialists(brigade, Skills.PLUMBER);
 
-        Assert.assertArrayEquals(expectedArray, actualArray);
+        int actual1 = 2;
+        int actual2 = 0;
+
+        Assert.assertEquals(expected1, actual1);
+        Assert.assertEquals(expected2, actual2);
     }
 }

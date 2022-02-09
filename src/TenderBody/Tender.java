@@ -1,13 +1,26 @@
+package TenderBody;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 public class Tender {
+    private Map<Skills, Integer> neededSpecialists;
     private ArrayList<Brigade> brigades;
     private ArrayList<Brigade> brigadesPassed = new ArrayList<>();
 
-    public Tender(ArrayList<Brigade> brigades) {
+    public Tender(Map<Skills, Integer> neededSpecialists, ArrayList<Brigade> brigades) {
+        this.neededSpecialists = neededSpecialists;
         this.brigades = brigades;
+    }
+
+    public Map<Skills, Integer> getNeededSpecialists() {
+        return neededSpecialists;
+    }
+
+    public void setNeededSpecialists(Map<Skills, Integer> neededSpecialists) {
+        this.neededSpecialists = neededSpecialists;
     }
 
     public ArrayList<Brigade> getBrigades() {
@@ -26,32 +39,29 @@ public class Tender {
         this.brigadesPassed = brigadesPassed;
     }
 
-    public Brigade validation(int numberOfArchitect, int numberOfBricklayer, int numberOfElectrician,
-                              int numberOfWelder, int numberOfPlumber, int numberOfFitter, Tender tender) {
+    public Brigade validation(Tender tender) {
 
-        int[] neededArray = new int[]{numberOfArchitect, numberOfBricklayer, numberOfElectrician, numberOfWelder, numberOfPlumber, numberOfFitter};
-        ArrayList<Brigade> brigades = tender.getBrigades();
-
-        for (int numberBrigade = 0; numberBrigade < brigades.size(); numberBrigade++) {
-            int[] checkedArray = Brigade.getNumberOfSpecialists(brigades.get(numberBrigade));
-            tender.checkArray(checkedArray, neededArray, numberBrigade);
+        for (int i = 0; i < brigades.size(); i++) {
+            Brigade checkedBrigade = tender.brigades.get(i);
+            tender.checkBrigade(checkedBrigade, tender);
         }
-
         Brigade winnerBrigade = tender.selectionLowestPrice(brigadesPassed);
         brigadesPassed.clear();
         return winnerBrigade;
     }
 
-    private void checkArray(int[] checkedArray, int[] neededArray, int numberBrigade) {
+    private void checkBrigade(Brigade checkedBrigade, Tender tender) {
         int discrepancy = 0;
 
-        for (int j = 0; j < neededArray.length; j++) {
-            if (checkedArray[j] < neededArray[j]) {
-                discrepancy++;
+        for (int j = 0; j < Skills.values().length; j++) {
+            for (Skills skills : Skills.values()) {
+                if (Brigade.getCountOfSpecialists(checkedBrigade, skills) < tender.getNeededSpecialists().get(skills)) {
+                    discrepancy++;
+                }
             }
         }
         if (discrepancy == 0) {
-            brigadesPassed.add(brigades.get(numberBrigade));
+            brigadesPassed.add(checkedBrigade);
         }
     }
 
@@ -82,18 +92,19 @@ public class Tender {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tender tender = (Tender) o;
-        return Objects.equals(brigades, tender.brigades);
+        return Objects.equals(neededSpecialists, tender.neededSpecialists) && Objects.equals(brigades, tender.brigades);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(brigades);
+        return Objects.hash(neededSpecialists, brigades);
     }
 
     @Override
     public String toString() {
         return "Tender{" +
-                "brigades=" + brigades +
+                "neededSpecialists=" + neededSpecialists +
+                ", brigades=" + brigades +
                 '}';
     }
 }

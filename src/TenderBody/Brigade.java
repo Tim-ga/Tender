@@ -1,3 +1,5 @@
+package TenderBody;
+
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -16,7 +18,7 @@ public class Brigade {
         this.employees = employees;
     }
 
-    protected static BigDecimal getBrigadeFullCost(Brigade brigade) {
+    public static BigDecimal getBrigadeFullCost(Brigade brigade) {
         BigDecimal sum = BigDecimal.ZERO;
 
         for (Employee employee : brigade.getEmployees()) {
@@ -25,16 +27,13 @@ public class Brigade {
         return sum;
     }
 
-    protected static int[] getNumberOfSpecialists(Brigade brigade) {
-        Skills[] skills = Skills.values();
-        int[] numberOfSpecialists = new int[skills.length];
+    public static int getCountOfSpecialists(Brigade brigade, Skills skill) {
+        int countOfSpecialists = 0;
 
-        for (int i = 0; i < skills.length; i++) {
             for (Employee employee : brigade.getEmployees()) {
-                numberOfSpecialists[i] += Collections.frequency(employee.getSkills(), skills[i]);
+                countOfSpecialists += Collections.frequency(employee.getSkills(), skill);
             }
-        }
-        return numberOfSpecialists;
+        return countOfSpecialists;
     }
 
     @Override
