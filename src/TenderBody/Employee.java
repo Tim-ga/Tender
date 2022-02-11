@@ -1,9 +1,11 @@
+package TenderBody;
+
 import java.math.BigDecimal;
 import java.util.EnumSet;
 import java.util.Objects;
 
 public class Employee {
-    private EnumSet skills;
+    private EnumSet<Skills> skills;
     private BigDecimal financialOffer;
 
     public Employee(EnumSet skills, BigDecimal financialOffer) {

@@ -1,3 +1,5 @@
+package TenderBody;
+
 public enum Skills {
     ARCHITECT,
     BRICKLAYER,
