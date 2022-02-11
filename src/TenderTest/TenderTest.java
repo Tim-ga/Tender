@@ -1,4 +1,4 @@
-package TenderTests;
+package TenderTest;
 
 import TenderBody.*;
 import org.junit.Assert;

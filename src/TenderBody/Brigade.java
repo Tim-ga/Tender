@@ -18,7 +18,7 @@ public class Brigade {
         this.employees = employees;
     }
 
-    public static BigDecimal getBrigadeFullCost(Brigade brigade) {
+    protected BigDecimal getBrigadeFullCost(Brigade brigade) {
         BigDecimal sum = BigDecimal.ZERO;
 
         for (Employee employee : brigade.getEmployees()) {
@@ -27,7 +27,7 @@ public class Brigade {
         return sum;
     }
 
-    public static int getCountOfSpecialists(Brigade brigade, Skills skill) {
+    protected int getCountOfSpecialists(Brigade brigade, Skills skill) {
         int countOfSpecialists = 0;
 
             for (Employee employee : brigade.getEmployees()) {

@@ -55,7 +55,7 @@ public class Tender {
 
         for (int j = 0; j < Skills.values().length; j++) {
             for (Skills skills : Skills.values()) {
-                if (Brigade.getCountOfSpecialists(checkedBrigade, skills) < tender.getNeededSpecialists().get(skills)) {
+                if (checkedBrigade.getCountOfSpecialists(checkedBrigade, skills) < tender.getNeededSpecialists().get(skills)) {
                     discrepancy++;
                 }
             }
@@ -75,11 +75,11 @@ public class Tender {
             winnerBrigade = brigadesPassed.get(0);
         }
         if (brigadesPassed.size() > 1) {
-            BigDecimal minFullCostBrigade = Brigade.getBrigadeFullCost(brigadesPassed.get(0));
+            BigDecimal minFullCostBrigade = brigadesPassed.get(0).getBrigadeFullCost(brigadesPassed.get(0));
 
             for (int i = 0; i < brigadesPassed.size(); i++) {
-                minFullCostBrigade = Brigade.getBrigadeFullCost(brigadesPassed.get(i)).min(minFullCostBrigade);
-                if (Brigade.getBrigadeFullCost(brigadesPassed.get(i)).equals(minFullCostBrigade)) {
+                minFullCostBrigade = brigadesPassed.get(0).getBrigadeFullCost(brigadesPassed.get(i)).min(minFullCostBrigade);
+                if (brigadesPassed.get(0).getBrigadeFullCost(brigadesPassed.get(i)).equals(minFullCostBrigade)) {
                     winnerBrigade = brigadesPassed.get(i);
                 }
             }
