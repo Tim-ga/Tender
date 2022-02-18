@@ -18,24 +18,6 @@ public class Brigade {
         this.employees = employees;
     }
 
-    protected BigDecimal getBrigadeFullCost(Brigade brigade) {
-        BigDecimal sum = BigDecimal.ZERO;
-
-        for (Employee employee : brigade.getEmployees()) {
-            sum = sum.add(employee.getFinancialOffer());
-        }
-        return sum;
-    }
-
-    protected int getCountOfSpecialists(Brigade brigade, Skills skill) {
-        int countOfSpecialists = 0;
-
-            for (Employee employee : brigade.getEmployees()) {
-                countOfSpecialists += Collections.frequency(employee.getSkills(), skill);
-            }
-        return countOfSpecialists;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

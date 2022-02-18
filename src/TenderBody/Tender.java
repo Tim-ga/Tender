@@ -2,6 +2,7 @@ package TenderBody;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 public class Tender {
@@ -52,7 +53,7 @@ public class Tender {
 
         for (int j = 0; j < Skills.values().length; j++) {
             for (Skills skills : Skills.values()) {
-                if (checkedBrigade.getCountOfSpecialists(checkedBrigade, skills) < neededSpecialists.get(skills)) {
+                if (getCountOfSpecialists(checkedBrigade, skills) < neededSpecialists.get(skills)) {
                     discrepancy++;
                 }
             }
@@ -72,16 +73,34 @@ public class Tender {
             winnerBrigade = brigadesPassed.get(0);
         }
         if (brigadesPassed.size() > 1) {
-            BigDecimal minFullCostBrigade = brigadesPassed.get(0).getBrigadeFullCost(brigadesPassed.get(0));
+            BigDecimal minFullCostBrigade = getBrigadeFullCost(brigadesPassed.get(0));
 
             for (int i = 0; i < brigadesPassed.size(); i++) {
-                minFullCostBrigade = brigadesPassed.get(0).getBrigadeFullCost(brigadesPassed.get(i)).min(minFullCostBrigade);
-                if (brigadesPassed.get(0).getBrigadeFullCost(brigadesPassed.get(i)).equals(minFullCostBrigade)) {
+                minFullCostBrigade = getBrigadeFullCost(brigadesPassed.get(i)).min(minFullCostBrigade);
+                if (getBrigadeFullCost(brigadesPassed.get(i)).equals(minFullCostBrigade)) {
                     winnerBrigade = brigadesPassed.get(i);
                 }
             }
         }
         return winnerBrigade;
+    }
+
+    private BigDecimal getBrigadeFullCost(Brigade brigade) {
+        BigDecimal sum = BigDecimal.ZERO;
+
+        for (Employee employee : brigade.getEmployees()) {
+            sum = sum.add(employee.getFinancialOffer());
+        }
+        return sum;
+    }
+
+    private int getCountOfSpecialists(Brigade brigade, Skills skill) {
+        int countOfSpecialists = 0;
+
+        for (Employee employee : brigade.getEmployees()) {
+            countOfSpecialists += Collections.frequency(employee.getSkills(), skill);
+        }
+        return countOfSpecialists;
     }
 
     @Override
