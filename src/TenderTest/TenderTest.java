@@ -9,15 +9,17 @@ import java.util.*;
 
 public class TenderTest {
 
-    Tender tender1;
-    Tender tender2;
-    Tender tender3;
-    Tender tender4;
-    Tender tender5;
+    Tender tender;
     Brigade brigade1;
     Brigade brigade2;
     Brigade brigade3;
     Brigade brigade4;
+    Map<Skills, Integer> neededSpecialists1;
+    Map<Skills, Integer> neededSpecialists2;
+    Map<Skills, Integer> neededSpecialists3;
+    Map<Skills, Integer> neededSpecialists4;
+    Map<Skills, Integer> neededSpecialists5;
+    ArrayList<Brigade> tenderBrigades;
 
     @Before
     public void initialization() {
@@ -64,7 +66,7 @@ public class TenderTest {
         employeesBrigade4.add(new Employee(EnumSet.of(Skills.PLUMBER), new BigDecimal("800")));
         employeesBrigade4.add(new Employee(EnumSet.of(Skills.PLUMBER, Skills.WELDER), new BigDecimal("1200")));
 
-        Map<Skills, Integer> neededSpecialists1 = new HashMap<>();
+        neededSpecialists1 = new HashMap<>();
         neededSpecialists1.put(Skills.ARCHITECT, 1);
         neededSpecialists1.put(Skills.BRICKLAYER, 1);
         neededSpecialists1.put(Skills.ELECTRICIAN, 3);
@@ -72,7 +74,7 @@ public class TenderTest {
         neededSpecialists1.put(Skills.PLUMBER, 2);
         neededSpecialists1.put(Skills.FITTER, 1);
 
-        Map<Skills, Integer> neededSpecialists2 = new HashMap<>();
+        neededSpecialists2 = new HashMap<>();
         neededSpecialists2.put(Skills.ARCHITECT, 2);
         neededSpecialists2.put(Skills.BRICKLAYER, 1);
         neededSpecialists2.put(Skills.ELECTRICIAN, 1);
@@ -80,7 +82,7 @@ public class TenderTest {
         neededSpecialists2.put(Skills.PLUMBER, 2);
         neededSpecialists2.put(Skills.FITTER, 1);
 
-        Map<Skills, Integer> neededSpecialists3 = new HashMap<>();
+        neededSpecialists3 = new HashMap<>();
         neededSpecialists3.put(Skills.ARCHITECT, 1);
         neededSpecialists3.put(Skills.BRICKLAYER, 1);
         neededSpecialists3.put(Skills.ELECTRICIAN, 1);
@@ -88,7 +90,7 @@ public class TenderTest {
         neededSpecialists3.put(Skills.PLUMBER, 1);
         neededSpecialists3.put(Skills.FITTER, 0);
 
-        Map<Skills, Integer> neededSpecialists4 = new HashMap<>();
+        neededSpecialists4 = new HashMap<>();
         neededSpecialists4.put(Skills.ARCHITECT, 1);
         neededSpecialists4.put(Skills.BRICKLAYER, 3);
         neededSpecialists4.put(Skills.ELECTRICIAN, 1);
@@ -96,7 +98,7 @@ public class TenderTest {
         neededSpecialists4.put(Skills.PLUMBER, 2);
         neededSpecialists4.put(Skills.FITTER, 0);
 
-        Map<Skills, Integer> neededSpecialists5 = new HashMap<>();
+        neededSpecialists5 = new HashMap<>();
         neededSpecialists5.put(Skills.ARCHITECT, 0);
         neededSpecialists5.put(Skills.BRICKLAYER, 0);
         neededSpecialists5.put(Skills.ELECTRICIAN, 10);
@@ -104,21 +106,17 @@ public class TenderTest {
         neededSpecialists5.put(Skills.PLUMBER, 0);
         neededSpecialists5.put(Skills.FITTER, 0);
 
-        ArrayList<Brigade> brigades = new ArrayList<>(List.of(brigade1, brigade2, brigade3, brigade4));
+        tenderBrigades = new ArrayList<>(List.of(brigade1, brigade2, brigade3, brigade4));
 
-        tender1 = new Tender(neededSpecialists1, brigades);
-        tender2 = new Tender(neededSpecialists2, brigades);
-        tender3 = new Tender(neededSpecialists3, brigades);
-        tender4 = new Tender(neededSpecialists4, brigades);
-        tender5 = new Tender(neededSpecialists5, brigades);
+        tender = new Tender();
     }
 
     @Test
     public void validation() {
-        Brigade expectedBrigade1 = tender1.validation(tender1);
-        Brigade expectedBrigade2 = tender2.validation(tender2);
-        Brigade expectedBrigade3 = tender3.validation(tender3);
-        Brigade expectedBrigade4 = tender4.validation(tender4);
+        Brigade expectedBrigade1 = tender.validation(neededSpecialists1, tenderBrigades);
+        Brigade expectedBrigade2 = tender.validation(neededSpecialists2, tenderBrigades);
+        Brigade expectedBrigade3 = tender.validation(neededSpecialists3, tenderBrigades);
+        Brigade expectedBrigade4 = tender.validation(neededSpecialists4, tenderBrigades);
 
         Assert.assertEquals(expectedBrigade1, brigade2);
         Assert.assertEquals(expectedBrigade2, brigade1);
@@ -128,6 +126,6 @@ public class TenderTest {
 
     @Test(expected = SuitableBrigadesExeption.class)
     public void validationExeption() {
-        System.out.println(tender5.validation(tender5));
+        tender.validation(neededSpecialists5, tenderBrigades);
     }
 }

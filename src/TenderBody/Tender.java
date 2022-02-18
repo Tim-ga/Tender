@@ -3,16 +3,13 @@ package TenderBody;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 public class Tender {
     private Map<Skills, Integer> neededSpecialists;
-    private ArrayList<Brigade> brigades;
+    private ArrayList<Brigade> tenderBrigades;
     private ArrayList<Brigade> brigadesPassed = new ArrayList<>();
 
-    public Tender(Map<Skills, Integer> neededSpecialists, ArrayList<Brigade> brigades) {
-        this.neededSpecialists = neededSpecialists;
-        this.brigades = brigades;
+    public Tender() {
     }
 
     public Map<Skills, Integer> getNeededSpecialists() {
@@ -23,12 +20,12 @@ public class Tender {
         this.neededSpecialists = neededSpecialists;
     }
 
-    public ArrayList<Brigade> getBrigades() {
-        return brigades;
+    public ArrayList<Brigade> getTenderBrigades() {
+        return tenderBrigades;
     }
 
-    public void setBrigades(ArrayList<Brigade> brigades) {
-        this.brigades = brigades;
+    public void setTenderBrigades(ArrayList<Brigade> tenderBrigades) {
+        this.tenderBrigades = tenderBrigades;
     }
 
     public ArrayList<Brigade> getBrigadesPassed() {
@@ -39,23 +36,23 @@ public class Tender {
         this.brigadesPassed = brigadesPassed;
     }
 
-    public Brigade validation(Tender tender) {
+    public Brigade validation(Map<Skills, Integer> neededSpecialists, ArrayList<Brigade> tenderBrigades) {
 
-        for (int i = 0; i < brigades.size(); i++) {
-            Brigade checkedBrigade = tender.brigades.get(i);
-            tender.checkBrigade(checkedBrigade, tender);
+        for (int i = 0; i < tenderBrigades.size(); i++) {
+            Brigade checkedBrigade = tenderBrigades.get(i);
+            checkBrigade(checkedBrigade, neededSpecialists);
         }
-        Brigade winnerBrigade = tender.selectionLowestPrice(brigadesPassed);
+        Brigade winnerBrigade = selectionLowestPrice(brigadesPassed);
         brigadesPassed.clear();
         return winnerBrigade;
     }
 
-    private void checkBrigade(Brigade checkedBrigade, Tender tender) {
+    private void checkBrigade(Brigade checkedBrigade, Map<Skills, Integer> neededSpecialists) {
         int discrepancy = 0;
 
         for (int j = 0; j < Skills.values().length; j++) {
             for (Skills skills : Skills.values()) {
-                if (checkedBrigade.getCountOfSpecialists(checkedBrigade, skills) < tender.getNeededSpecialists().get(skills)) {
+                if (checkedBrigade.getCountOfSpecialists(checkedBrigade, skills) < neededSpecialists.get(skills)) {
                     discrepancy++;
                 }
             }
@@ -88,24 +85,8 @@ public class Tender {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tender tender = (Tender) o;
-        return Objects.equals(neededSpecialists, tender.neededSpecialists) && Objects.equals(brigades, tender.brigades);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(neededSpecialists, brigades);
-    }
-
-    @Override
     public String toString() {
-        return "Tender{" +
-                "neededSpecialists=" + neededSpecialists +
-                ", brigades=" + brigades +
-                '}';
+        return "Tender{}";
     }
 }
 
